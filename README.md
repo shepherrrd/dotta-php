@@ -12,11 +12,8 @@
 composer require shepherrrd/dotta-php
 ```
 
-[dottawebsite]: https://withdotta.com
-[dottaapidoc]: https://docs.withdotta.com
-[packagistlink]: https::packagist.com/shepherrrd/dotta-php
-
 2.  Setup 'dotta-php' with the configuration
+
     '''
     //setup dotta config
     public $apiKey = env('dotta-apikey);
@@ -62,3 +59,7 @@ $faceAttribute = $dotta->getFaceAttributes($photo);
 | BaseUrlSandbox | API base url for dotta's sandbox or test environment. |
 
 Pass the your public and private key if you don't know how to get a base64 string encoding of your keys. Otherwise, just pass the ApiKey. When you pass the ApiKey, you won't need to pass the public and private keys.
+
+[dottawebsite]: https://withdotta.com
+[dottaapidoc]: https://docs.withdotta.com
+[packagistlink]: https::packagist.com/shepherrrd/dotta-php
