@@ -48,8 +48,6 @@ $dotta = new Dotta\Dotta($config);
 $photo = $request->files('photo) ?? "images/usedotta.jpg";
 $faceAttribute = $dotta->getFaceAttributes($photo);
 
-```
-
 **Dotta Configurations Options**
 | **Option** | **Description** |
 | ---------- | --------------- |
@@ -65,4 +63,3 @@ Pass the your public and private key if you don't know how to get a base64 strin
 [dottawebsite]: https://withdotta.com
 [dottaapidoc]: https://docs.withdotta.com
 [packagistlink]: https::packagist.com/shepherrrd/dotta-php
-```
