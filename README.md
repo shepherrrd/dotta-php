@@ -39,11 +39,15 @@ composer require shepherrrd/dotta-php
 //Initialize the dotta class with the config
 $dotta = new Dotta\Dotta($config);
 
+```
+
 3. You can now access Any member of the Dotta Class
 
 ```
+
 $photo = $request->files('photo) ?? "images/usedotta.jpg";
 $faceAttribute = $dotta->getFaceAttributes($photo);
+
 ```
 
 **Dotta Configurations Options**
@@ -61,3 +65,4 @@ Pass the your public and private key if you don't know how to get a base64 strin
 [dottawebsite]: https://withdotta.com
 [dottaapidoc]: https://docs.withdotta.com
 [packagistlink]: https::packagist.com/shepherrrd/dotta-php
+```
