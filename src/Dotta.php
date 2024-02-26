@@ -2,13 +2,18 @@
 
 namespace Dotta;
 use Exception;
+use Dotta\Config;
 use Dotta\Models\DottaResponse;
-use Dotta\Models\HttpDottaFaceAttributesResponse;
-use Dotta\Models\HttpDottaFaceAttributesResponseData;
-use Dotta\Models\HttpDottaFaceDetectResponse;
-use Dotta\Models\HttpDottaFaceDetectResponseData;
-use Dotta\Models\HttpDottaResponse;
 use Dotta\Enums\DottaEnvironment;
+use Dotta\Models\HttpDottaResponse;
+use Dotta\Models\HttpDottaFaceDetectResponse;
+use Dotta\Models\HttpDottaFaceAttributesResponse;
+use Dotta\Models\HttpDottaFaceDetectResponseData;
+use Dotta\Models\HttpDottaFaceAttributesResponseData;
+use Dotta\Models\HttpDottaFaceMatchResponse;
+use Dotta\Models\HttpDottaFaceMatchResponseData;
+use Dotta\Models\HttpDottaFaceActiveLivenessResponseData;
+
 
 class Dotta {
     public $apiKey;
@@ -20,6 +25,11 @@ class Dotta {
     private $allowFileExtensions = ['.png', '.jpeg', '.jpg'];
     private $httpClient;
 
+     /**
+     * Constructor for Dotta class.
+     * 
+     * @param Config $config Configuration object.
+     */
     public function __construct($config) {
         
         $this->publicKey = $config->publicKey;
@@ -37,8 +47,14 @@ class Dotta {
             $this->apiKey = $base64String;
         }
     }
+     /**
+     * Retrieves face attributes from a given photo.
+     *
+     * @param array $photo Array representing the photo file.
+     * @return DottaResponse The response object with face attributes.
+     */
 
-    public function getFaceAttributes($photo) {
+    public function getFaceAttributes($photo) : DottaResponse {
         $faceAttributesResponse = new DottaResponse();
 
         try {
@@ -77,12 +93,12 @@ class Dotta {
 
 if ($response->getStatusCode() == 200){
     // Deserialize to HttpDottaFaceAttributesResponse
-    $responseDTO = new Models\HttpDottaFaceAttributesResponse();
+    $responseDTO = new HttpDottaFaceAttributesResponse();
     $responseDTO->status = $responseData['status'];
     $responseDTO->message = $responseData['message'];
 
     // Manually map data properties
-    $responseDTO->data = new Models\HttpDottaFaceAttributesResponseData();
+    $responseDTO->data = new HttpDottaFaceAttributesResponseData();
     $responseDTO->data->age = $responseData['data']['age'] ?? null;
     $responseDTO->data->errorCode = $responseData['data']['errorCode'] ?? null;
     $responseDTO->data->errorMessage = $responseData['data']['errorMessage'] ?? null;
@@ -101,7 +117,7 @@ if ($response->getStatusCode() == 200){
 
 } else {
     // Deserialize to HttpDottaResponse for error handling
-    $errorResponse = new Models\HttpDottaResponse();
+    $errorResponse = new HttpDottaResponse();
     $errorResponse->status = $responseData['status'];
     $errorResponse->message = $responseData['message'];
 
@@ -119,7 +135,13 @@ if ($response->getStatusCode() == 200){
         }
 }
 
-public function faceDetection($photo) {
+ /**
+     * Performs face detection on a given photo.
+     *
+     * @param array $photo Array representing the photo file.
+     * @return DottaResponse The response object with face detection data.
+     */
+public function faceDetection($photo) : DottaResponse {
     $faceDetectResponse = new DottaResponse();
 
     try {
@@ -154,7 +176,7 @@ public function faceDetection($photo) {
         // Make network request and serialize response
         $baseUrl = $this->environment == DottaEnvironment::PRODUCTION ? $this->baseUrlProduction : $this->baseUrlSandbox;
         $response = $this->httpClient->request('POST', $baseUrl . '/Face/Detect', [
-            'headers' => ['Authorization' => 'Basic ' . base64_encode($this->apiKey)],
+            'headers' => ['Authorization' => 'Basic ' . $this->apiKey],
             'multipart' => $multipart
         ]);
 
@@ -197,16 +219,199 @@ public function faceDetection($photo) {
     }
 }
 
-private function getPhotoMimeType($photoExtension) {
-    $photoExtension = strtolower($photoExtension);
 
-    if ($photoExtension == ".jpg" || $photoExtension == ".jpeg") {
-        return "image/jpeg";
-    } else if ($photoExtension == ".png") {
-        return "image/png";
-    } else {
-        return null;
+
+/**
+     * Compares two photos and returns the similarity score.
+     *
+     * @param array $photoOne Array representing the first photo file.
+     * @param array $photoTwo Array representing the second photo file.
+     * @return DottaResponse Response object with the face match data.
+     */
+    public function faceMatch($photoOne, $photoTwo) {
+        $faceMatchResponse = new DottaResponse();
+
+        try {
+            // Check if photo files are empty
+            if ($photoOne === null || $photoTwo === null) {
+                return new DottaResponse(false, "Reference photo and probe photo with a face is required");
+            }
+
+            // Check for allowed photo file extensions
+            $photoOneExtension = strtolower(pathinfo($photoOne['name'], PATHINFO_EXTENSION));
+            $photoTwoExtension = strtolower(pathinfo($photoTwo['name'], PATHINFO_EXTENSION));
+            if (!in_array($photoOneExtension, $this->allowFileExtensions) || !in_array($photoTwoExtension, $this->allowFileExtensions)) {
+                return new DottaResponse(false, "File extension not allowed. Allowed extensions are " . implode(" ", $this->allowFileExtensions));
+            }
+
+            // Get photos MIME types
+            $photoOneMimeType = $this->getPhotoMimeType($photoOneExtension);
+            $photoTwoMimeType = $this->getPhotoMimeType($photoTwoExtension);
+            if (empty($photoOneMimeType) || empty($photoTwoMimeType)) {
+                return new DottaResponse(false, "Photo has an invalid mimetype");
+            }
+
+            // Build content for multipart HTTP request
+            $imageOneContent = fopen($photoOne['tmp_name'], 'r');
+            $imageTwoContent = fopen($photoTwo['tmp_name'], 'r');
+            $multipart = [
+                [
+                    'name'     => 'PhotoOne',
+                    'contents' => $imageOneContent,
+                    'filename' => $photoOne['name'],
+                    'headers'  => ['Content-Type' => $photoOneMimeType]
+                ],
+                [
+                    'name'     => 'PhotoTwo',
+                    'contents' => $imageTwoContent,
+                    'filename' => $photoTwo['name'],
+                    'headers'  => ['Content-Type' => $photoTwoMimeType]
+                ]
+            ];
+
+            // Make network request and serialize response
+            $baseUrl = $this->environment == DottaEnvironment::PRODUCTION ? $this->baseUrlProduction : $this->baseUrlSandbox;
+            $response = $this->httpClient->request('POST', $baseUrl . '/Face/Match', [
+                'headers' => ['Authorization' => 'Basic ' . $this->apiKey],
+                'multipart' => $multipart
+            ]);
+
+            $body = $response->getBody();
+            $data = json_decode($body, true);
+
+            if ($response->getStatusCode() == 200) {
+                // Success - Deserialize and map to FaceMatchResponse
+                $responseDTO = new HttpDottaFaceMatchResponse();
+                $responseDTO->status = $data['status'];
+                $responseDTO->message = $data['message'];
+
+                $responseDTO->data = new HttpDottaFaceMatchResponseData();
+                $responseDTO->data->errorCode = $data['data']['errorCode'] ?? null;
+                $responseDTO->data->errorMessage = $data['data']['errorMessage'] ?? null;
+                $responseDTO->data->similarityScore = $data['data']['similarityScore'] ?? null;
+
+                $faceMatchResponse->status = $responseDTO->status;
+                $faceMatchResponse->message = $responseDTO->message;
+                $faceMatchResponse->data = $responseDTO->data;
+            } else {
+                // Error - Deserialize and map to HttpDottaResponse
+                $errorResponse = new HttpDottaResponse();
+                $errorResponse->status = $data['status'];
+                $errorResponse->message = $data['message'];
+
+                $faceMatchResponse->status = $errorResponse->status;
+                $faceMatchResponse->message = $errorResponse->message;
+            }
+
+            fclose($imageOneContent);
+            fclose($imageTwoContent);
+
+            return $faceMatchResponse;
+
+        } catch (Exception $ex) {
+            return new DottaResponse(false, $ex->getMessage());
+        }
     }
-}
+    /**
+     * Performs active liveness analysis on a collection of photos.
+     *
+     * @param array $photos Array of photo files.
+     * @return DottaResponse Response object with the active liveness analysis data.
+     */
+    public function activeLivenessCheck($photos) {
+        $faceActiveLivenessResponse = new DottaResponse();
+
+        try {
+            // Check if photo collection is empty
+            if (empty($photos)) {
+                return new DottaResponse(false, "The collection of photos cannot be empty");
+            }
+
+            $multipart = [];
+            foreach ($photos as $photo) {
+                // Check for allowed photo file extension
+                $photoExtension = strtolower(pathinfo($photo['name'], PATHINFO_EXTENSION));
+                if (!in_array($photoExtension, $this->allowFileExtensions)) {
+                    return new DottaResponse(false, "Invalid file extension detected. Allowed extensions are " . implode(" ", $this->allowFileExtensions));
+                }
+
+                // Get photo MIME type
+                $photoMimeType = $this->getPhotoMimeType($photoExtension);
+                if (empty($photoMimeType)) {
+                    return new DottaResponse(false, "Invalid photo MIME type detected");
+                }
+
+                // Build content for multipart HTTP request
+                $imageContent = fopen($photo['tmp_name'], 'r');
+                $multipart[] = [
+                    'name'     => 'Photos',
+                    'contents' => $imageContent,
+                    'filename' => $photo['name'],
+                    'headers'  => ['Content-Type' => $photoMimeType]
+                ];
+            }
+
+            // Make network request and serialize response
+            $baseUrl = $this->environment == DottaEnvironment::PRODUCTION ? $this->baseUrlProduction : $this->baseUrlSandbox;
+            $response = $this->httpClient->request('POST', $baseUrl . '/Face/ActiveLiveness', [
+                'headers' => ['Authorization' => 'Basic ' . base64_encode($this->apiKey)],
+                'multipart' => $multipart
+            ]);
+
+            $body = $response->getBody();
+            $data = json_decode($body, true);
+
+            if ($response->getStatusCode() == 200) {
+                // Success - Deserialize and map to FaceActiveLivenessResponse
+                $faceActiveLivenessResponse->status = $data['status'];
+                $faceActiveLivenessResponse->message = $data['message'];
+                $faceActiveLivenessResponse->data = new HttpDottaFaceActiveLivenessResponseData();
+                $faceActiveLivenessResponse->data->livenessScore = $data['data']['livenessScore'] ?? null;
+                // ... Map other properties of data ...
+            } else {
+                // Error handling
+                $faceActiveLivenessResponse->status = false;
+                $faceActiveLivenessResponse->message = $data['message'] ?? 'An error occurred.';
+            }
+
+            // Close file resources
+            foreach ($multipart as $part) {
+                if (isset($part['contents']) && is_resource($part['contents'])) {
+                    fclose($part['contents']);
+                }
+            }
+
+            return $faceActiveLivenessResponse;
+
+        } catch (Exception $ex) {
+            return new DottaResponse(false, $ex->getMessage());
+        }
+    }
+
+
+/**
+     * Determines the MIME type based on the photo file extension.
+     * 
+     * @param string $photoExtension The file extension of the photo.
+     * @return string|null The MIME type or null if not recognized.
+     */
+
+     private static function getPhotoMimeType($photoExtension) : string | null {
+        $photoExtension = strtolower($photoExtension);
+    
+        if ($photoExtension == ".jpg" || $photoExtension == ".jpeg") {
+            return "image/jpeg";
+        } else if ($photoExtension == ".png") {
+            return "image/png";
+        } else {
+            return null;
+        }
+    }
+
 
 }
+
+
+
+
+
