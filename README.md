@@ -63,4 +63,4 @@ Pass the your public and private key if you don't know how to get a base64 strin
 
 [dottawebsite]: https://withdotta.com
 [dottaapidoc]: https://docs.withdotta.com
-[packagistlink]: https::packagist.com/shepherrrd/dotta-php
+[packagistlink]: https://packagist.org/packages/shepherrrd/dotta-php
