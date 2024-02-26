@@ -16,11 +16,11 @@ composer require shepherrrd/dotta-php
 
     ```
         //setup dotta config
-        public $apiKey = env('dotta-apikey);
-        public $publicKey = env('dotta-publickey);
-        public $privateKey = env('dotta-privatekey);
-        public $environment = env('dotta-environment) // DottaEnvironment::PRODUCTION;
-        public $baseUrlProduction = env('dotta-produrl);
+        public $apiKey = env('dotta-apikey');
+        public $publicKey = env('dotta-publickey');
+        public $privateKey = env('dotta-privatekey');
+        public $environment = env('dotta-environment') // DottaEnvironment::PRODUCTION;
+        public $baseUrlProduction = env('dotta-produrl');
         public $baseUrlSandbox env('dotta-sandboxurl');
         public $httpClient = new client() //guzzlehttpclient;
 
@@ -44,7 +44,7 @@ composer require shepherrrd/dotta-php
     //Initialize the dotta class with the config
         $dotta = new Dotta\Dotta($config);
 
-    $photo = $request->files('photo) ?? "images/usedotta.jpg";
+    $photo = $request->files('photo') ?? "images/usedotta.jpg";
     $faceAttribute = $dotta->getFaceAttributes($photo);
 
     ```
