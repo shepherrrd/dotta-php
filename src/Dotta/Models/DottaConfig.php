@@ -1,5 +1,5 @@
 <?php 
-namespace Dotta;
+namespace Dotta\Models;
 class DottaConfig
 {
     public $apiKey;

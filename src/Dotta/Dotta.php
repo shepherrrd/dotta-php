@@ -2,16 +2,16 @@
 
 namespace Dotta;
 use Exception;
-use Dotta\Config;
+use Dotta\Models\DottaConfig;
 use Dotta\Models\DottaResponse;
 use Dotta\Enums\DottaEnvironment;
 use Dotta\Models\HttpDottaResponse;
+use Dotta\Models\HttpDottaFaceMatchResponse;
 use Dotta\Models\HttpDottaFaceDetectResponse;
+use Dotta\Models\HttpDottaFaceMatchResponseData;
 use Dotta\Models\HttpDottaFaceAttributesResponse;
 use Dotta\Models\HttpDottaFaceDetectResponseData;
 use Dotta\Models\HttpDottaFaceAttributesResponseData;
-use Dotta\Models\HttpDottaFaceMatchResponse;
-use Dotta\Models\HttpDottaFaceMatchResponseData;
 use Dotta\Models\HttpDottaFaceActiveLivenessResponseData;
 
 
@@ -28,7 +28,7 @@ class Dotta {
      /**
      * Constructor for Dotta class.
      * 
-     * @param Config $config Configuration object.
+     * @param DottaConfig $config Configuration object.
      */
     public function __construct($config) {
         
@@ -50,7 +50,7 @@ class Dotta {
      /**
      * Retrieves face attributes from a given photo.
      *
-     * @param array $photo Array representing the photo file.
+     * @param string $photo Array representing the photo file.
      * @return DottaResponse The response object with face attributes.
      */
 
@@ -138,7 +138,7 @@ if ($response->getStatusCode() == 200){
  /**
      * Performs face detection on a given photo.
      *
-     * @param array $photo Array representing the photo file.
+     * @param string $photo Array representing the photo file.
      * @return DottaResponse The response object with face detection data.
      */
 public function faceDetection($photo) : DottaResponse {
@@ -224,8 +224,8 @@ public function faceDetection($photo) : DottaResponse {
 /**
      * Compares two photos and returns the similarity score.
      *
-     * @param array $photoOne Array representing the first photo file.
-     * @param array $photoTwo Array representing the second photo file.
+     * @param string $photoOne Array representing the first photo file.
+     * @param string $photoTwo Array representing the second photo file.
      * @return DottaResponse Response object with the face match data.
      */
     public function faceMatch($photoOne, $photoTwo) {
