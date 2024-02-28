@@ -50,7 +50,7 @@ class Dotta {
      /**
      * Retrieves face attributes from a given photo.
      *
-     * @param string $photo Array representing the photo file.
+     * @param array $photo Array representing the photo file.
      * @return DottaResponse The response object with face attributes.
      */
 
@@ -138,7 +138,7 @@ if ($response->getStatusCode() == 200){
  /**
      * Performs face detection on a given photo.
      *
-     * @param string $photo Array representing the photo file.
+     * @param array $photo Array representing the photo file.
      * @return DottaResponse The response object with face detection data.
      */
 public function faceDetection($photo) : DottaResponse {
@@ -224,8 +224,8 @@ public function faceDetection($photo) : DottaResponse {
 /**
      * Compares two photos and returns the similarity score.
      *
-     * @param string $photoOne Array representing the first photo file.
-     * @param string $photoTwo Array representing the second photo file.
+     * @param array $photoOne Array representing the first photo file.
+     * @param array $photoTwo Array representing the second photo file.
      * @return DottaResponse Response object with the face match data.
      */
     public function faceMatch($photoOne, $photoTwo) {

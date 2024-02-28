@@ -1,6 +1,6 @@
 <?php 
-
-require_once __DIR__ . '/vendor/autoload.php';
+namespace Demo;
+require __DIR__. "/../../vendor/autoload.php";
 
 use Dotta\Dotta;
 use GuzzleHttp\Client;
@@ -17,7 +17,7 @@ class DottaDemo {
     public $httpClient;
     public $config;
     public $dotta;
-    private $image = __DIR__ . "/Images/female.jpg";
+    private $image = __DIR__ . "/Images/female.jpeg";
     private $image2 = __DIR__ . "/Images/male.jpg";
 
     public function __construct()
@@ -42,7 +42,14 @@ class DottaDemo {
     {
         $content = $this->getImageContent($this->image);
         $mimeType = $this->getImageMimeType($this->image);
-        $response = $this->dotta->faceDetection($content);
+        $fakeFileArray = [
+            'name' => basename($this->image), // get the filename
+            'type' => $mimeType,
+            'tmp_name' => $this->image, // path to the image
+            'size' => filesize($this->image) // get the file size
+        ];
+        echo (json_encode($fakeFileArray) . "\n");
+        $response = $this->dotta->faceDetection($fakeFileArray);
         return $response;
     }
 
@@ -50,7 +57,13 @@ class DottaDemo {
     {
         $content = $this->getImageContent($this->image);
         $mimeType = $this->getImageMimeType($this->image);
-        $response = $this->dotta->getFaceAttributes($content);
+        $fakeFileArray = [
+            'name' => basename($this->image), // get the filename
+            'type' => $mimeType,
+            'tmp_name' => $this->image, // path to the image
+            'size' => filesize($this->image) // get the file size
+        ];
+        $response = $this->dotta->getFaceAttributes($fakeFileArray);
         return $response;
     }
 
@@ -58,15 +71,43 @@ class DottaDemo {
     {
         $content1 = $this->getImageContent($this->image);
         $content2 = $this->getImageContent($this->image2);
-        $response = $this->dotta->faceMatch($content1, $content2);
+        $mimeType = $this->getImageMimeType($this->image);
+        $mimeType2 = $this->getImageMimeType($this->image2);
+        $fakeFileArray = [
+            'name' => basename($this->image), // get the filename
+            'type' => $mimeType,
+            'tmp_name' => $this->image, // path to the image
+            'size' => filesize($this->image) // get the file size
+        ];
+        $fakeFileArray2 = [
+            'name' => basename($this->image2), // get the filename
+            'type' => $mimeType2,
+            'tmp_name' => $this->image2, // path to the image
+            'size' => filesize($this->image2) // get the file size
+        ];
+        $response = $this->dotta->faceMatch($fakeFileArray, $fakeFileArray2);
         return $response;
     }
 
     public function testFaceActiveLiveness()
     {
         $content1 = $this->getImageContent($this->image);
-        $content2 = $this->getImageContent($this->image2);
-        $response = $this->dotta->activeLivenessCheck([$content1, $content2]);
+        $content2 = $this->getImageContent($this->image2);        
+        $mimeType = $this->getImageMimeType($this->image);
+        $mimeType2 = $this->getImageMimeType($this->image2);
+        $fakeFileArray = [
+            'name' => basename($this->image), // get the filename
+            'type' => $mimeType,
+            'tmp_name' => $this->image, // path to the image
+            'size' => filesize($this->image) // get the file size
+        ];
+        $fakeFileArray2 = [
+            'name' => basename($this->image2), // get the filename
+            'type' => $mimeType2,
+            'tmp_name' => $this->image2, // path to the image
+            'size' => filesize($this->image2) // get the file size
+        ];
+        $response = $this->dotta->activeLivenessCheck([$fakeFileArray, $fakeFileArray2]);
         return $response;
     }
 
