@@ -62,7 +62,7 @@ class Dotta {
                 return new DottaResponse(false, "Photo with a face is required");
             }
 
-            $photoExtension = strtolower(pathinfo($photo['name'], PATHINFO_EXTENSION));
+            $photoExtension ="." . strtolower(pathinfo($photo['name'], PATHINFO_EXTENSION));
             if (!in_array($photoExtension, $this->allowFileExtensions)) {
                 return new DottaResponse(false, "File extension not allowed. Allowed extensions are " . implode(" ", $this->allowFileExtensions));
             }
@@ -151,7 +151,7 @@ public function faceDetection($photo) : DottaResponse {
         }
 
         // Check for allowed photo file extension
-        $photoExtension = strtolower(pathinfo($photo['name'], PATHINFO_EXTENSION));
+        $photoExtension ="." . strtolower(pathinfo($photo['name'], PATHINFO_EXTENSION));
         if (!in_array($photoExtension, $this->allowFileExtensions)) {
             return new DottaResponse(false, "File extension not allowed. Allowed extensions are " . implode(" ", $this->allowFileExtensions));
         }
@@ -238,8 +238,8 @@ public function faceDetection($photo) : DottaResponse {
             }
 
             // Check for allowed photo file extensions
-            $photoOneExtension = strtolower(pathinfo($photoOne['name'], PATHINFO_EXTENSION));
-            $photoTwoExtension = strtolower(pathinfo($photoTwo['name'], PATHINFO_EXTENSION));
+            $photoOneExtension = "." . strtolower(pathinfo($photoOne['name'], PATHINFO_EXTENSION));
+            $photoTwoExtension = "." . strtolower(pathinfo($photoTwo['name'], PATHINFO_EXTENSION));
             if (!in_array($photoOneExtension, $this->allowFileExtensions) || !in_array($photoTwoExtension, $this->allowFileExtensions)) {
                 return new DottaResponse(false, "File extension not allowed. Allowed extensions are " . implode(" ", $this->allowFileExtensions));
             }
@@ -330,7 +330,7 @@ public function faceDetection($photo) : DottaResponse {
             $multipart = [];
             foreach ($photos as $photo) {
                 // Check for allowed photo file extension
-                $photoExtension = strtolower(pathinfo($photo['name'], PATHINFO_EXTENSION));
+                $photoExtension ="." . strtolower(pathinfo($photo['name'], PATHINFO_EXTENSION));
                 if (!in_array($photoExtension, $this->allowFileExtensions)) {
                     return new DottaResponse(false, "Invalid file extension detected. Allowed extensions are " . implode(" ", $this->allowFileExtensions));
                 }
