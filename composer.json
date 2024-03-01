@@ -10,7 +10,8 @@
     "psr-4": {
       "Dotta\\": "src/Dotta",
       "Dotta\\Models\\": "src/Dotta/Models",
-      "Dotta\\Enums\\": "src/Dotta/Enums"
+      "Dotta\\Enums\\": "src/Dotta/Enums",
+      "Dotta\\DottaDemo\\": "src/Demo/DottaDemo"
     }
   },
   "authors": [
