@@ -3,3 +3,4 @@
 /.idea
 /composer.lock
 .env
+src/Demo/vendor/

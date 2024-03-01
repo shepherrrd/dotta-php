@@ -4,7 +4,7 @@ namespace Dotta\Models;
 
 
 
-class HttpDottaResponse
+ class HttpDottaResponse
 {
     public $status;
     public $message;
