@@ -8,7 +8,9 @@
   },
   "autoload": {
     "psr-4": {
-      "Dotta\\": "src/Dotta"
+      "Dotta\\": "src/Dotta",
+      "Dotta\\Models\\": "src/Dotta/Models",
+      "Dotta\\Enums\\": "src/Dotta/Enums"
     }
   },
   "authors": [

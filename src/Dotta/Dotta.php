@@ -185,7 +185,7 @@ public function faceDetection($photo) : DottaResponse {
 
        if ($response->getStatusCode() == 200) {
             // Success - Deserialize and map to FaceDetectResponse
-            $responseDTO = new HttpDottaFaceDetectResponse();
+            $responseDTO = new HttpDottaFaceAttributesResponse();
             $responseDTO->status = $data['status'];
             $responseDTO->message = $data['message'];
 
