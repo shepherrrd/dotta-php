@@ -8,7 +8,7 @@
   },
   "autoload": {
     "psr-4": {
-      "shepherrrd\\Dotta\\": "src/Dotta/"
+      "Dotta\\": "src/Dotta"
     }
   },
   "authors": [

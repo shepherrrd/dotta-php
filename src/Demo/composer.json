@@ -1,0 +1,5 @@
+{
+    "require": {
+        "shepherrrd/dotta-php": "^1.0"
+    }
+}
