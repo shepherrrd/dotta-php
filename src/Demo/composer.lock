@@ -537,16 +537,16 @@
         },
         {
             "name": "shepherrrd/dotta-php",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shepherrrd/dotta-php.git",
-                "reference": "783deee8fa5ff82bf5fb3dd9d46db4516a6065cd"
+                "reference": "f7da064aa52d1d5cdbb6a8320472e9528ccc0d10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shepherrrd/dotta-php/zipball/783deee8fa5ff82bf5fb3dd9d46db4516a6065cd",
-                "reference": "783deee8fa5ff82bf5fb3dd9d46db4516a6065cd",
+                "url": "https://api.github.com/repos/shepherrrd/dotta-php/zipball/f7da064aa52d1d5cdbb6a8320472e9528ccc0d10",
+                "reference": "f7da064aa52d1d5cdbb6a8320472e9528ccc0d10",
                 "shasum": ""
             },
             "require": {
@@ -556,7 +556,9 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Dotta\\": "src/"
+                    "Dotta\\": "src/Dotta",
+                    "Dotta\\Enums\\": "src/Dotta/Enums",
+                    "Dotta\\Models\\": "src/Dotta/Models"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -569,9 +571,9 @@
             "description": "dotta-php is a lightweight and intuitive package designed to streamline the integration process of dotta biometrics service and empower businesses to harness the power of dotta effortlessly.",
             "support": {
                 "issues": "https://github.com/shepherrrd/dotta-php/issues",
-                "source": "https://github.com/shepherrrd/dotta-php/tree/v1.0.0"
+                "source": "https://github.com/shepherrrd/dotta-php/tree/v1.0.1"
             },
-            "time": "2024-02-26T21:08:04+00:00"
+            "time": "2024-03-01T22:39:48+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

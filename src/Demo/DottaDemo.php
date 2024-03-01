@@ -1,6 +1,6 @@
 <?php 
 namespace DottaDemo;
-require_once  __DIR__. "/../../vendor";
+require_once  __DIR__. "/vendor/autoload.php";
 use Dotta\Enums\DottaEnvironment as DottaEnvironment;
 use Dotta\Dotta as Dotta;
 use GuzzleHttp\Client;
@@ -45,7 +45,7 @@ class DottaDemo {
     }
     public function testFaceDetect()
     {
-        print_r ($this->config);
+        //print_r ($this->config);
         $content = $this->getImageContent($this->image);
         $mimeType = $this->getImageMimeType($this->image);
         $fakeFileArray = [
