@@ -37,16 +37,32 @@ class DottaDemo {
     private function getImageMimeType($path) {
         return mime_content_type($path);
     }
+    private function createTemporaryFileFromExisting($existingFilePath) {
+        // Read the content of the existing file
+        $fileContent = file_get_contents($existingFilePath);
+    
+        // Create a temporary file and get its name
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'upload_');
+    
+        // Write the content into the temporary file
+        file_put_contents($tempFilePath, $fileContent);
+    
+        // Return the path of the temporary file
+        return $tempFilePath;
+    }
+    
+    
     public function testFaceDetect()
     {
         //print_r ($this->config);
         $content = $this->getImageContent($this->image);
         $mimeType = $this->getImageMimeType($this->image);
+        $tempFilePath = $this->createTemporaryFileFromExisting($this->image);
         $fakeFileArray = [
             'name' => basename($this->image), // get the filename
             'type' => $mimeType,
-            'tmp_name' => $this->image, // path to the image
-            'size' => filesize($this->image) // get the file size
+            'tmp_name' => $tempFilePath, // path to the image
+            'size' => filesize($tempFilePath) // get the file size
         ];
         echo (json_encode($fakeFileArray) . "\n");
         $response = $this->dotta->faceDetection($fakeFileArray);
@@ -57,11 +73,13 @@ class DottaDemo {
     {
         $content = $this->getImageContent($this->image);
         $mimeType = $this->getImageMimeType($this->image);
+        $mimeType = $this->getImageMimeType($this->image);
+        $tempFilePath = $this->createTemporaryFileFromExisting($this->image);
         $fakeFileArray = [
             'name' => basename($this->image), // get the filename
             'type' => $mimeType,
-            'tmp_name' => $this->image, // path to the image
-            'size' => filesize($this->image) // get the file size
+            'tmp_name' => $tempFilePath, // path to the image
+            'size' => filesize($tempFilePath) // get the file size
         ];
         $response = $this->dotta->getFaceAttributes($fakeFileArray);
         return $response;
@@ -73,17 +91,20 @@ class DottaDemo {
         $content2 = $this->getImageContent($this->image2);
         $mimeType = $this->getImageMimeType($this->image);
         $mimeType2 = $this->getImageMimeType($this->image2);
+        $mimeType = $this->getImageMimeType($this->image);
+        $tempFilePath = $this->createTemporaryFileFromExisting($this->image);
+        $tempFilePath2 = $this->createTemporaryFileFromExisting($this->image2);
         $fakeFileArray = [
             'name' => basename($this->image), // get the filename
             'type' => $mimeType,
-            'tmp_name' => $this->image, // path to the image
-            'size' => filesize($this->image) // get the file size
+            'tmp_name' => $tempFilePath, // path to the image
+            'size' => filesize($tempFilePath) // get the file size
         ];
         $fakeFileArray2 = [
             'name' => basename($this->image2), // get the filename
             'type' => $mimeType2,
-            'tmp_name' => $this->image2, // path to the image
-            'size' => filesize($this->image2) // get the file size
+            'tmp_name' => $tempFilePath2, // path to the image
+            'size' => filesize($tempFilePath2) // get the file size
         ];
         $response = $this->dotta->faceMatch($fakeFileArray, $fakeFileArray2);
         return $response;
@@ -95,17 +116,20 @@ class DottaDemo {
         $content2 = $this->getImageContent($this->image2);        
         $mimeType = $this->getImageMimeType($this->image);
         $mimeType2 = $this->getImageMimeType($this->image2);
+        $mimeType = $this->getImageMimeType($this->image);
+        $tempFilePath = $this->createTemporaryFileFromExisting($this->image);
+        $tempFilePath2 = $this->createTemporaryFileFromExisting($this->image2);
         $fakeFileArray = [
             'name' => basename($this->image), // get the filename
             'type' => $mimeType,
-            'tmp_name' => $this->image, // path to the image
-            'size' => filesize($this->image) // get the file size
+            'tmp_name' => $tempFilePath, // path to the image
+            'size' => filesize($tempFilePath) // get the file size
         ];
         $fakeFileArray2 = [
             'name' => basename($this->image2), // get the filename
             'type' => $mimeType2,
-            'tmp_name' => $this->image2, // path to the image
-            'size' => filesize($this->image2) // get the file size
+            'tmp_name' => $tempFilePath2, // path to the image
+            'size' => filesize($tempFilePath2) // get the file size
         ];
         $response = $this->dotta->activeLivenessCheck([$fakeFileArray, $fakeFileArray2]);
         return $response;

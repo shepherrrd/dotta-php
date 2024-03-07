@@ -262,7 +262,8 @@ if ($response->getStatusCode() == 200){
     $faceAttributesResponse->message = $errorResponse->message;
 }
 
-            fclose($imageContent);
+          if (is_resource($imageContent))
+              fclose($imageContent);
 
             return $faceAttributesResponse;
 
@@ -345,8 +346,8 @@ public function faceDetection($photo) : DottaResponse {
             $faceDetectResponse->status = $errorResponse->status;
             $faceDetectResponse->message = $errorResponse->message;
         }
-
-        fclose($imageContent);
+        if (is_resource($imageContent))
+             fclose($imageContent);
 
         return $faceDetectResponse;
 
@@ -438,10 +439,10 @@ public function faceDetection($photo) : DottaResponse {
                 $faceMatchResponse->status = $errorResponse->status;
                 $faceMatchResponse->message = $errorResponse->message;
             }
-
+            if (is_resource($imageOneContent && $imageTwoContent)){
             fclose($imageOneContent);
             fclose($imageTwoContent);
-
+            }
             return $faceMatchResponse;
 
         } catch (Exception $ex) {
