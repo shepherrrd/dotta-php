@@ -6,12 +6,6 @@ use Dotta\Dotta as Dotta;
 use GuzzleHttp\Client;
 use Dotta\Models\DottaConfig as DottaConfig;
 
-
-
-
-
-
-
 class DottaDemo {
    public $apiKey;
     public $publicKey;
