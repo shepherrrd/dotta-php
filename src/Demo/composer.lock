@@ -537,16 +537,16 @@
         },
         {
             "name": "shepherrrd/dotta-php",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shepherrrd/dotta-php.git",
-                "reference": "283f69817ed8daeecf1ebf6e59257d15b07e1ab6"
+                "reference": "645dcf3d9d3ab0d07d6605180239f953fd178673"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shepherrrd/dotta-php/zipball/283f69817ed8daeecf1ebf6e59257d15b07e1ab6",
-                "reference": "283f69817ed8daeecf1ebf6e59257d15b07e1ab6",
+                "url": "https://api.github.com/repos/shepherrrd/dotta-php/zipball/645dcf3d9d3ab0d07d6605180239f953fd178673",
+                "reference": "645dcf3d9d3ab0d07d6605180239f953fd178673",
                 "shasum": ""
             },
             "require": {
@@ -571,9 +571,9 @@
             "description": "dotta-php is a lightweight and intuitive package designed to streamline the integration process of dotta biometrics service and empower businesses to harness the power of dotta effortlessly.",
             "support": {
                 "issues": "https://github.com/shepherrrd/dotta-php/issues",
-                "source": "https://github.com/shepherrrd/dotta-php/tree/v1.0.5"
+                "source": "https://github.com/shepherrrd/dotta-php/tree/v1.0.6"
             },
-            "time": "2024-03-07T08:03:24+00:00"
+            "time": "2024-03-07T08:20:40+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

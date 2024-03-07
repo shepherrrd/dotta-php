@@ -4,7 +4,7 @@ require_once  __DIR__. "/vendor/autoload.php";
 use Dotta\Enums\DottaEnvironment as DottaEnvironment;
 use Dotta\Dotta as Dotta;
 use GuzzleHttp\Client;
-use Dotta\Models\DottaConfig as DottaConfig;
+use Dotta\DottaConfig as DottaConfig;
 
 class DottaDemo {
    public $apiKey;
@@ -28,7 +28,7 @@ class DottaDemo {
         $this->baseUrlProduction = 'https://apps.securedrecords.com/dotta-biometrics/api';
         $this->baseUrlSandbox = 'https://apps.securedrecords.com/DevDottaBiometrics/api';
         $this->httpClient = new Client();
-        $this->config = new DottaConfig(getenv('DOTTA_API_KEY'), "BA0E7843853A4A6587DEDC08F48F3EBC","66DCD214C5E742B9A5CDEFC81650BFEE", $this->environment, $this->baseUrlProduction, $this->baseUrlSandbox, $this->httpClient);
+        $this->config = new DottaConfig(getenv('DOTTA_API_KEY'), $this->publicKey,$this->privateKey, $this->environment, $this->baseUrlProduction, $this->baseUrlSandbox, $this->httpClient);
          $this->dotta = new Dotta($this->config);
     }
     private function getImageContent($path) {
